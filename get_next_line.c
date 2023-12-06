@@ -6,11 +6,10 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2023/12/06 12:26:29 by dramos-j         ###   ########.fr       */
+/*   Updated: 2023/12/06 12:48:08 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int
-	
+int get_next_line()

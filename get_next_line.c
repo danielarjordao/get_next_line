@@ -20,15 +20,13 @@ int	newline(t_list *list)
 	if (!list)
 		return (0);
 	i = 0;
-	while (!list)
+	while (list)
 	{
-		j = 0;
-		while (list->content[j] && j < BUFFER_SIZE)
+		while (list->content[i] && i < BUFFER_SIZE)
 		{
-			if (list->content[j] == '\n')
+			if (list->content[i] == '\n')
 				return (i);
 			i++;
-			j++;
 		}		
 		list = list->next;
 	}

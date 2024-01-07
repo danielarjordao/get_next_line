@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 14:37:59 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/01/07 11:56:00 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/01/07 13:04:04 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	newline(t_list *list)
 	while (list->content[i])
 	{
 		if (list->content[i] == '\n')
-			return (0);
+			return (i);
 		i++;
 	}
-	return (i);
+	return (0);
 }
 
 t_list	*ft_lstnew(void *content)

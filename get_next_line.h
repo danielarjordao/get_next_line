@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <stdio.h>
 
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 10
@@ -31,5 +32,6 @@ char	*get_next_line(int fd);
 int		newline(t_list *list);
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_back(t_list **lst, t_list *new);
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 14:37:59 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/01/07 11:47:23 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/01/07 11:56:00 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	newline(t_list *list)
 	int	i;
 
 	if (!list)
-		return (0); 
+		return (0);
 	i = 0;
 	while (list->content[i])
 	{
@@ -39,6 +39,16 @@ t_list	*ft_lstnew(void *content)
 	lstnew->next = 0;
 	return (lstnew);
 }
+
+t_list	*ft_lstlast(t_list *lst)
+{
+	if (!lst)
+		return (0);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}
+
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*lstlast;
@@ -50,4 +60,13 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	}
 	lstlast = ft_lstlast(*lst);
 	lstlast->next = new;
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	if (!dest && !src)
+		return (0);
+	while (n--)
+		((char *)dest)[n] = ((const char *)src)[n];
+	return (dest);
 }

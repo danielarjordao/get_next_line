@@ -33,5 +33,7 @@ int		newline(t_list *list);
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_back(t_list **lst, t_list *new);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
+t_list	*ft_lstlast(t_list *lst);
+void   create_list(t_list **list, int fd);
 
 #endif

@@ -50,7 +50,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	if (!dest && !src)
 		return (0);
-	while (n--)
-		((char *)dest)[n] = ((const char *)src)[n];
+	while (n--) 
+		((char *)dest)[n] = ((const char *)src)[n]; 
 	return (dest);
 }

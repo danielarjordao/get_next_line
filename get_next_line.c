@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2023/12/23 15:24:17 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/01/07 18:05:31 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	create_list(t_list **list, int fd)
 		if (size < 0)
 		{
 			free(content);
-			return;
+			return ;
 		}
 		content[size] = '\0';
 		ft_lstadd_back(list, ft_lstnew(content)); // adiciona o conteúdo lido na lista ligada
@@ -70,7 +70,7 @@ char	*get_next_line(int fd)
 	line[newline(list)] = '\0';
 	return (line);
 }
-
+/*
 int	main(void)
 {
 	int		fd;

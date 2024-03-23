@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/01/07 18:05:31 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/03/23 17:37:05 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*get_next_line(int fd)
 	line[newline(list)] = '\0';
 	return (line);
 }
-/*
+
 int	main(void)
 {
 	int		fd;
@@ -79,4 +79,4 @@ int	main(void)
 	fd = open("test.txt", O_RDONLY); // O_RDONLY read only; abrir um arquivo para leitura
 	line = get_next_line(fd); 
 	printf("%s\n", line); 
-}
+}*/

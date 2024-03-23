@@ -15,7 +15,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/MinGW/bin/gdb.exe", // substitua /path/to/gdb pelo caminho do seu gdb
+            "miDebuggerPath": "/bin/gdb", // substitua /path/to/gdb pelo caminho do seu gdb
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

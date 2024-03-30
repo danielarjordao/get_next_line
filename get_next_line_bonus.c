@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/03/30 17:04:00 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/03/30 17:12:02 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,17 @@ void	create_list(t_list **list, int fd)
 	}
 }
 
-void	cpylist(char *dest, t_list *list) // copia o conteúdo da lista ligada para a string line
+void	cpylist(t_list *list) // copia o conteúdo da lista ligada para a string line
 {
 	int	len;
 	int	i;
+	char	*dest;
 
 	if (NULL == list)
 		return ;
+	dest = malloc(listlen(list) + 1); // aloca espaço para a string line
+	if (!dest)
+		return (NULL);
 	len = 0;
 	while (list)
 	{
@@ -91,19 +95,16 @@ void	clean_list(t_list **list)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list = NULL; // cria uma lista ligada
+	static t_list	*list[4096]; // cria uma lista ligada
 	char			*firstline;
-	
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &firstline, 0) < 0)  // se o arquivo nao existir, ou o buffer for menor que 0, ou se nao conseguir ler o arquivo
+
+	if (fd < 0 || fd > 4095 || BUFFER_SIZE <= 0 || read(fd, &firstline, 0) < 0)  // se o arquivo nao existir, ou o buffer for menor que 0, ou se nao conseguir ler o arquivo
 		return (NULL);
-	create_list(&list, fd); // cria a lista com o conteúdo da primeira linha do arquivo
-	if (list == NULL)
+	create_list(list, fd); // cria a lista com o conteúdo da primeira linha do arquivo
+	if (list[fd] == NULL)
 		return (NULL);
-	firstline = malloc(listlen(list) + 1); // aloca espaço para a string line
-	if (!firstline)
-		return (NULL);
-	cpylist(firstline, list); // copia o conteúdo da lista ligada para a string line
-	clean_list(&list); // limpa a lista ligada
+	firstline = cpylist(firstline, list[fd]); // copia o conteúdo da lista ligada para a string line
+	clean_list(&list[fd]); // limpa a lista ligada
 	return (firstline);
 }
 /*

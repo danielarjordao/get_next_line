@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 14:37:59 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/03/24 16:12:53 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/03/30 15:03:25 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int	newline(t_list *list)
 {
 	int	i;
-	
-	if (list == NULL)  
+
+	if (NULL == list)
 		return (0);
 	i = 0;
-	while (list->content[i])
+	while (list->content[i] && i < BUFFER_SIZE)
 	{
 		if (list->content[i] == '\n')
 			return (1);
@@ -62,28 +62,48 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	lstlast->next = new;
 }
 
-void	cpylist(char *dest, t_list *list)
+int	listlen(t_list *list)
 {
 	int	i;
 	int	len;
 
-	if (NULL == list)
-		return ;
+	if (!list)
+		return (0);
 	len = 0;
 	while (list)
 	{
 		i = 0;
-		while (list->content[i])
+		while (list->content[i] && i < BUFFER_SIZE)
 		{
 			if (list->content[i] == '\n')
-			{
-				dest[len++] = '\n';
-				dest[len] = '\0';
-				return ;
-			}
-			dest[len++] = list->content[i++];
-		}
+				return (len + 1);
+			i++;
+			len++;
+		}		
 		list = list->next;
 	}
-	dest[len] = '\0';
+	return (len);
+}
+
+void	freemem(t_list **list, t_list *rest_node, char *rest) 
+{
+	t_list	*temp;
+
+	if (*list == NULL)
+		return ;
+	while (*list)
+	{
+		temp = (*list)->next; // salva o próximo node
+		free((*list)->content);
+		free(*list);
+		*list = temp; // avança para o próximo node
+	}
+	*list = NULL; // reseta a lista
+	if (rest_node->content[0])
+		*list = rest_node; // se o conteudo do rest_node for diferente de vazio, ele adiciona o rest_node na lista
+	else 
+	{
+		free(rest); 
+		free(rest_node);
+	}
 }

@@ -6,44 +6,63 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/03/30 17:12:02 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/03/31 14:56:40 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	create_list(t_list **list, int fd)
 {
 	char	*content;
 	int		size;
 
-	while (!newline(ft_lstlast(*list))) // enquanto não encontrar uma quebra de linha no final da lista
+	while (!newline(ft_lstlast(*list)))
 	{
-		content = malloc(BUFFER_SIZE + 1); // aloca espaço para o conteúdo do tamanho do buffer
-		if (!content) 
-			return;
-		size = read(fd, content, BUFFER_SIZE); // lê o conteúdo do arquivo, armazena em content e retorna o tamanho
+		content = malloc(BUFFER_SIZE + 1);
+		if (!content)
+			return ;
+		size = read(fd, content, BUFFER_SIZE);
 		if (!size)
 		{
 			free(content);
 			return ;
 		}
-		content[size] = '\0'; // adiciona o terminador de string
-		ft_lstadd_back(list, ft_lstnew(content)); // adiciona o conteúdo lido no final da lista
+		content[size] = '\0';
+		ft_lstadd_back(list, ft_lstnew(content));
 	}
 }
 
-void	cpylist(t_list *list) // copia o conteúdo da lista ligada para a string line
+int	listlen(t_list *list)
+{
+	int	i;
+	int	len;
+
+	if (!list)
+		return (0);
+	len = 0;
+	while (list)
+	{
+		i = 0;
+		while (list->content[i] && i < BUFFER_SIZE)
+		{
+			if (list->content[i] == '\n')
+				return (len + 1);
+			i++;
+			len++;
+		}
+		list = list->next;
+	}
+	return (len);
+}
+
+void	cpylist(char *dest, t_list *list)
 {
 	int	len;
 	int	i;
-	char	*dest;
 
 	if (NULL == list)
 		return ;
-	dest = malloc(listlen(list) + 1); // aloca espaço para a string line
-	if (!dest)
-		return (NULL);
 	len = 0;
 	while (list)
 	{
@@ -52,12 +71,12 @@ void	cpylist(t_list *list) // copia o conteúdo da lista ligada para a string li
 		{
 			if (list->content[i] == '\n')
 			{
-				dest[len] = '\n'; 
+				dest[len] = '\n';
 				len++;
 				dest[len] = '\0';
 				return ;
 			}
-			dest[len] = list->content[i]; // copia o conteúdo da lista para a string
+			dest[len] = list->content[i];
 			len++;
 			i++;
 		}
@@ -66,7 +85,7 @@ void	cpylist(t_list *list) // copia o conteúdo da lista ligada para a string li
 	dest[len] = '\0';
 }
 
-void	clean_list(t_list **list) 
+void	clean_list(t_list **list)
 {
 	t_list	*last_node;
 	t_list	*rest_node;
@@ -74,46 +93,55 @@ void	clean_list(t_list **list)
 	int		k;
 	char	*rest;
 
-	rest = malloc(BUFFER_SIZE + 1); 
-	if (NULL == rest)
+	rest = malloc(BUFFER_SIZE + 1);
+	if (rest == NULL)
 		return ;
-	last_node = ft_lstlast(*list); // pega o ultimo node da lista
+	last_node = ft_lstlast(*list);
 	i = 0;
 	k = 0;
-	while (last_node->content[i] && last_node->content[i] != '\n') // enquanto nao encontrar uma quebra de linha
+	while (last_node->content[i] && last_node->content[i] != '\n')
 		++i;
-	while (last_node->content[i]) // enquanto nao encontrar o final da string; 
+	while (last_node->content[i])
 	{
 		i++;
-		rest[k] = last_node->content[i]; // copia o restante da string para rest
+		rest[k] = last_node->content[i];
 		k++;
 	}
 	rest[k] = '\0';
-	rest_node = ft_lstnew(rest); // cria um novo node com o conteúdo rest
-	freemem(list, rest_node, rest); // libera a memória
+	rest_node = ft_lstnew(rest);
+	freemem(list, rest_node, rest);
 }
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list[4096]; // cria uma lista ligada
+	static t_list	*list[FOPEN_MAX];
 	char			*firstline;
 
-	if (fd < 0 || fd > 4095 || BUFFER_SIZE <= 0 || read(fd, &firstline, 0) < 0)  // se o arquivo nao existir, ou o buffer for menor que 0, ou se nao conseguir ler o arquivo
+	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
-	create_list(list, fd); // cria a lista com o conteúdo da primeira linha do arquivo
+	if (read(fd, &firstline, 0) < 0)
+		return (NULL);
+	create_list(&list[fd], fd);
 	if (list[fd] == NULL)
 		return (NULL);
-	firstline = cpylist(firstline, list[fd]); // copia o conteúdo da lista ligada para a string line
-	clean_list(&list[fd]); // limpa a lista ligada
+	firstline = malloc(listlen(list[fd]) + 1);
+	if (!firstline)
+		return (NULL);
+	cpylist(firstline, list[fd]);
+	clean_list(&list[fd]);
 	return (firstline);
 }
 /*
-int	main(void)
+int	main()
 {
-	int		fd;
-	char	*line;
+int		fd;
+int		fd2;
+char	*line;
 
-	fd = open("test.txt", O_RDONLY); // O_RDONLY read only; abrir um arquivo para leitura
-	line = get_next_line(fd); 
-	printf("%s\n", line); 
+fd = open("test.txt", O_RDONLY);
+fd2 = open("test2.txt", O_RDONLY); 
+line = get_next_line(fd);
+printf("Line: %s", line);
+line = get_next_line(fd2);
+printf("Line: %s", line);
 }*/

@@ -6,11 +6,11 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 14:37:59 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/03/30 17:11:51 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/03/31 14:29:04 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	newline(t_list *list)
 {
@@ -62,30 +62,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	lstlast->next = new;
 }
 
-int	listlen(t_list *list)
-{
-	int	i;
-	int	len;
-
-	if (!list)
-		return (0);
-	len = 0;
-	while (list)
-	{
-		i = 0;
-		while (list->content[i] && i < BUFFER_SIZE)
-		{
-			if (list->content[i] == '\n')
-				return (len + 1);
-			i++;
-			len++;
-		}		
-		list = list->next;
-	}
-	return (len);
-}
-
-void	freemem(t_list **list, t_list *rest_node, char *rest) 
+void	freemem(t_list **list, t_list *rest_node, char *rest)
 {
 	t_list	*temp;
 
@@ -93,17 +70,17 @@ void	freemem(t_list **list, t_list *rest_node, char *rest)
 		return ;
 	while (*list)
 	{
-		temp = (*list)->next; // salva o próximo node
+		temp = (*list)->next;
 		free((*list)->content);
 		free(*list);
-		*list = temp; // avança para o próximo node
+		*list = temp;
 	}
-	*list = NULL; // reseta a lista
+	*list = NULL;
 	if (rest_node->content[0])
-		*list = rest_node; // se o conteudo do rest_node for diferente de vazio, ele adiciona o rest_node na lista
-	else 
+		*list = rest_node;
+	else
 	{
-		free(rest); 
+		free(rest);
 		free(rest_node);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 12:40:38 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/03/31 14:30:33 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/06 16:29:59 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 #  define BUFFER_SIZE 10
 # endif
 
-typedef struct t_list
+typedef struct s_list
 {
 	char			*content;
-	struct t_list	*next;
+	struct s_list	*next;
 }					t_list;
 
 char	*get_next_line(int fd);

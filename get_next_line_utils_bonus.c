@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 14:37:59 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/03/31 14:29:04 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/06 13:41:17 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	freemem(t_list **list, t_list *rest_node, char *rest)
 	*list = NULL;
 	if (rest_node->content[0])
 		*list = rest_node;
-	else
+	else if (!rest_node->content[0])
 	{
 		free(rest);
 		free(rest_node);

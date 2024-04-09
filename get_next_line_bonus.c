@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/03/31 14:56:40 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:15:15 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	create_list(t_list **list, int fd)
 		if (!content)
 			return ;
 		size = read(fd, content, BUFFER_SIZE);
-		if (!size)
+		if (!size || size < 0)
 		{
 			free(content);
 			return ;
@@ -115,33 +115,61 @@ void	clean_list(t_list **list)
 char	*get_next_line(int fd)
 {
 	static t_list	*list[FOPEN_MAX];
-	char			*firstline;
+	char			*line;
 
 	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (read(fd, &firstline, 0) < 0)
 		return (NULL);
 	create_list(&list[fd], fd);
 	if (list[fd] == NULL)
 		return (NULL);
-	firstline = malloc(listlen(list[fd]) + 1);
-	if (!firstline)
+	line = malloc(listlen(list[fd]) + 1);
+	if (!line)
 		return (NULL);
-	cpylist(firstline, list[fd]);
+	cpylist(line, list[fd]);
 	clean_list(&list[fd]);
-	return (firstline);
+	return (line);
 }
 /*
-int	main()
+int	main(void)
 {
-int		fd;
-int		fd2;
-char	*line;
+	int		fd;
+	int		fd2;
+	char	*next_line;
+	int		count;
+	int		count2;
 
-fd = open("test.txt", O_RDONLY);
-fd2 = open("test2.txt", O_RDONLY); 
-line = get_next_line(fd);
-printf("Line: %s", line);
-line = get_next_line(fd2);
-printf("Line: %s", line);
+	count = 0;
+	count2 = 0;
+	fd = open("test.txt", O_RDONLY);
+	fd2 = open("test2.txt", O_RDONLY);
+	if (fd < 0 || fd2 < 0)
+	{
+		printf("Error");
+		return (1);
+	}
+	next_line = get_next_line(fd);
+	while (next_line)
+	{
+		count++;
+		printf("[%d]: %s\n", count, next_line);
+		free(next_line);
+		next_line = get_next_line(fd2);
+		if (!next_line)
+		{
+			free (next_line);
+			break ;
+		}
+		count2++;
+		printf("[%d]: %s\n", count2, next_line);
+		free(next_line);
+		next_line = get_next_line(fd);
+		if (!next_line)
+		{
+			free (next_line);
+			break ;
+		}
+	}
+	close(fd);
+	close(fd2);
+	return (0);
 }*/

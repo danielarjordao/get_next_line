@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/03/31 14:25:53 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:03:33 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	create_list(t_list **list, int fd)
 		if (!content)
 			return ;
 		size = read(fd, content, BUFFER_SIZE);
-		if (!size)
+		if (!size || size < 0)
 		{
 			free(content);
 			return ;
@@ -115,27 +115,47 @@ void	clean_list(t_list **list)
 char	*get_next_line(int fd)
 {
 	static t_list	*list = NULL;
-	char			*firstline;
+	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &firstline, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	create_list(&list, fd);
 	if (list == NULL)
 		return (NULL);
-	firstline = malloc(listlen(list) + 1);
-	if (!firstline)
+	line = malloc(listlen(list) + 1);
+	if (!line)
 		return (NULL);
-	cpylist(firstline, list);
+	cpylist(line, list);
 	clean_list(&list);
-	return (firstline);
+	return (line);
 }
 /*
 int	main(void)
 {
 	int		fd;
-	char	*line;
+	char	*next_line;
+	int		count;
 
-	fd = open("test.txt", O_RDONLY); 
-	line = get_next_line(fd); 
-	printf("%s\n", line); 
+	count = 0;
+	fd = open("test.txt", O_RDONLY);
+	if (fd < 0)
+	{
+		printf("Error");
+		return (1);
+	}
+	next_line = get_next_line(fd);
+	while (next_line)
+	{
+		count++;
+		printf("[%d]: %s\n", count, next_line);
+		free(next_line);
+		next_line = get_next_line(fd);
+		if (!next_line)
+		{
+			free (next_line);
+			break ;
+		}
+	}
+	close(fd);
+	return (0);
 }*/

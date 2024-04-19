@@ -6,13 +6,13 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/04/09 12:03:33 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/19 18:15:01 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	create_list(t_list **list, int fd)
+int	create_list(t_list **list, int fd)
 {
 	char	*content;
 	int		size;
@@ -21,16 +21,22 @@ void	create_list(t_list **list, int fd)
 	{
 		content = malloc(BUFFER_SIZE + 1);
 		if (!content)
-			return ;
+			return (1);
 		size = read(fd, content, BUFFER_SIZE);
-		if (!size || size < 0)
+		if (!size)
 		{
 			free(content);
-			return ;
+			return (1);
+		}
+		if (size < 0)
+		{
+			free(content);
+			return (2);
 		}
 		content[size] = '\0';
 		ft_lstadd_back(list, ft_lstnew(content));
 	}
+	return (1);
 }
 
 int	listlen(t_list *list)
@@ -116,10 +122,22 @@ char	*get_next_line(int fd)
 {
 	static t_list	*list = NULL;
 	char			*line;
+	int				testread;
+	t_list			*temp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	create_list(&list, fd);
+	testread = create_list(&list, fd);
+	if (testread == 2)
+	{
+		while (list)
+		{
+			temp = (list)->next;
+			free((list)->content);
+			free(list);
+			list = temp;
+		}
+	}
 	if (list == NULL)
 		return (NULL);
 	line = malloc(listlen(list) + 1);

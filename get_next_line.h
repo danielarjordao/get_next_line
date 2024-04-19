@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 12:40:38 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/04/06 16:30:34 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:52:53 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_list
 }					t_list;
 
 char	*get_next_line(int fd);
-void	create_list(t_list **list, int fd);
+int		create_list(t_list **list, int fd);
 void	cpylist(char *dest, t_list *list);
 void	clean_list(t_list **list);
 int		newline(t_list *list);

@@ -29,7 +29,7 @@ typedef struct s_list
 }					t_list;
 
 char	*get_next_line(int fd);
-void	create_list(t_list **list, int fd);
+int		create_list(t_list **list, int fd);
 void	cpylist(char *dest, t_list *list);
 void	clean_list(t_list **list);
 int		newline(t_list *list);

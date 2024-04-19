@@ -12,7 +12,7 @@
 
 #include "get_next_line_bonus.h"
 
-void	create_list(t_list **list, int fd)
+int	create_list(t_list **list, int fd)
 {
 	char	*content;
 	int		size;
@@ -21,16 +21,22 @@ void	create_list(t_list **list, int fd)
 	{
 		content = malloc(BUFFER_SIZE + 1);
 		if (!content)
-			return ;
+			return (1);
 		size = read(fd, content, BUFFER_SIZE);
-		if (!size || size < 0)
+		if (!size)
 		{
 			free(content);
-			return ;
+			return (1);
+		}
+		if (size < 0)
+		{
+			free(content);
+			return (2);
 		}
 		content[size] = '\0';
 		ft_lstadd_back(list, ft_lstnew(content));
 	}
+	return (1);
 }
 
 int	listlen(t_list *list)
@@ -116,10 +122,13 @@ char	*get_next_line(int fd)
 {
 	static t_list	*list[FOPEN_MAX];
 	char			*line;
+	int				testread;
 
 	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
-	create_list(&list[fd], fd);
+	testread = create_list(&list[fd], fd);
+	if (testread == 2 && list[fd])
+		clean_list(&list[fd]);
 	if (list[fd] == NULL)
 		return (NULL);
 	line = malloc(listlen(list[fd]) + 1);

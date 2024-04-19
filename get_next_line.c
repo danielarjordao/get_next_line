@@ -123,21 +123,12 @@ char	*get_next_line(int fd)
 	static t_list	*list = NULL;
 	char			*line;
 	int				testread;
-	t_list			*temp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	testread = create_list(&list, fd);
-	if (testread == 2)
-	{
-		while (list)
-		{
-			temp = (list)->next;
-			free((list)->content);
-			free(list);
-			list = temp;
-		}
-	}
+	if (testread == 2 && list)
+		clean_list(&list);
 	if (list == NULL)
 		return (NULL);
 	line = malloc(listlen(list) + 1);

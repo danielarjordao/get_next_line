@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/04/19 18:15:01 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/20 17:14:03 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,13 @@ int	create_list(t_list **list, int fd)
 		if (!content)
 			return (1);
 		size = read(fd, content, BUFFER_SIZE);
-		if (!size)
+		if (size < 0 || !size)
 		{
 			free(content);
-			return (1);
-		}
-		if (size < 0)
-		{
-			free(content);
-			return (2);
+			if (size < 0)
+				return (2);
+			if (!size)
+				return (1);
 		}
 		content[size] = '\0';
 		ft_lstadd_back(list, ft_lstnew(content));
@@ -44,8 +42,6 @@ int	listlen(t_list *list)
 	int	i;
 	int	len;
 
-	if (!list)
-		return (0);
 	len = 0;
 	while (list)
 	{
@@ -67,8 +63,6 @@ void	cpylist(char *dest, t_list *list)
 	int	len;
 	int	i;
 
-	if (NULL == list)
-		return ;
 	len = 0;
 	while (list)
 	{
@@ -100,7 +94,7 @@ void	clean_list(t_list **list)
 	char	*rest;
 
 	rest = malloc(BUFFER_SIZE + 1);
-	if (rest == NULL)
+	if (!rest)
 		return ;
 	last_node = ft_lstlast(*list);
 	i = 0;
@@ -129,7 +123,7 @@ char	*get_next_line(int fd)
 	testread = create_list(&list, fd);
 	if (testread == 2 && list)
 		clean_list(&list);
-	if (list == NULL)
+	if (!list)
 		return (NULL);
 	line = malloc(listlen(list) + 1);
 	if (!line)
@@ -152,7 +146,7 @@ int	main(void)
 		printf("Error");
 		return (1);
 	}
-	next_line = get_next_line(fd);
+	next_line = get_next_line(7);
 	while (next_line)
 	{
 		count++;

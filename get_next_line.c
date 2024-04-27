@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/04/20 17:14:03 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/21 14:20:11 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,27 +137,19 @@ int	main(void)
 {
 	int		fd;
 	char	*next_line;
-	int		count;
 
-	count = 0;
 	fd = open("test.txt", O_RDONLY);
+	next_line = get_next_line(fd);
 	if (fd < 0)
 	{
-		printf("Error");
+		printf("%s", next_line);;
 		return (1);
 	}
-	next_line = get_next_line(7);
 	while (next_line)
 	{
-		count++;
-		printf("[%d]: %s\n", count, next_line);
+		printf("%s", next_line);
 		free(next_line);
 		next_line = get_next_line(fd);
-		if (!next_line)
-		{
-			free (next_line);
-			break ;
-		}
 	}
 	close(fd);
 	return (0);

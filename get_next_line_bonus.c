@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 12:25:02 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/04/20 17:44:19 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/04/21 14:14:39 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,39 +138,35 @@ int	main(void)
 	int		fd;
 	int		fd2;
 	char	*next_line;
-	int		count;
-	int		count2;
+	char	*next_line2;
 
-	count = 0;
-	count2 = 0;
 	fd = open("test.txt", O_RDONLY);
-	fd2 = open("test2.txt", O_RDONLY);
-	if (fd < 0 || fd2 < 0)
+	next_line = get_next_line(fd);
+	if (fd < 0)
 	{
-		printf("Error");
+		printf("%s", next_line);;
 		return (1);
 	}
-	next_line = get_next_line(fd);
+	fd2 = open("test2.txt", O_RDONLY);
+	next_line2 = get_next_line(fd2);
+	if (fd2 < 0)
+	{
+		printf("%s", next_line2);
+		return (1);
+	}
+	printf("\n\nFile1:\n\n");
 	while (next_line)
 	{
-		count++;
-		printf("[%d]: %s\n", count, next_line);
-		free(next_line);
-		next_line = get_next_line(fd2);
-		if (!next_line)
-		{
-			free (next_line);
-			break ;
-		}
-		count2++;
-		printf("[%d]: %s\n", count2, next_line);
+		printf("%s", next_line);
 		free(next_line);
 		next_line = get_next_line(fd);
-		if (!next_line)
-		{
-			free (next_line);
-			break ;
-		}
+	}
+	printf("\n\nFile2:\n\n");
+	while (next_line2)
+	{
+		printf("%s", next_line2);
+		free(next_line2);
+		next_line2 = get_next_line(fd2);
 	}
 	close(fd);
 	close(fd2);
